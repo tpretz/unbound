@@ -77,6 +77,7 @@ forwards_create(void)
 static void fwd_zone_free(struct iter_forward_zone* n)
 {
 	if(!n) return;
+	// see if we need to free the backend obj here
 	delegpt_free_mlc(n->dp);
 	free(n->name);
 	free(n);

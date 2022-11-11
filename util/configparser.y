@@ -83,7 +83,7 @@ extern struct config_parser_state* cfg_parser;
 %token VAR_INFRA_CACHE_NUMHOSTS VAR_INFRA_CACHE_LAME_SIZE VAR_NAME
 %token VAR_STUB_ZONE VAR_STUB_HOST VAR_STUB_ADDR VAR_TARGET_FETCH_POLICY
 %token VAR_HARDEN_SHORT_BUFSIZE VAR_HARDEN_LARGE_QUERIES
-%token VAR_FORWARD_ZONE VAR_FORWARD_HOST VAR_FORWARD_ADDR
+%token VAR_FORWARD_ZONE VAR_FORWARD_HOST VAR_FORWARD_ADDR VAR_FORWARD_SRC_ADDR
 %token VAR_DO_NOT_QUERY_ADDRESS VAR_HIDE_IDENTITY VAR_HIDE_VERSION
 %token VAR_IDENTITY VAR_VERSION VAR_HARDEN_GLUE VAR_MODULE_CONF
 %token VAR_TRUST_ANCHOR_FILE VAR_TRUST_ANCHOR VAR_VAL_OVERRIDE_DATE
@@ -360,7 +360,7 @@ forwardstart: VAR_FORWARD_ZONE
 contents_forward: contents_forward content_forward
 	| ;
 content_forward: forward_name | forward_host | forward_addr | forward_first |
-	forward_no_cache | forward_ssl_upstream | forward_tcp_upstream
+	forward_no_cache | forward_ssl_upstream | forward_tcp_upstream | forward_src_addr
 	;
 viewstart: VAR_VIEW
 	{
@@ -2966,6 +2966,13 @@ forward_tcp_upstream: VAR_FORWARD_TCP_UPSTREAM STRING_ARG
                 free($2);
         }
         ;
+forward_src_addr: VAR_FORWARD_SRC_ADDR STRING_ARG
+	{
+		OUTYY(("P(forward-src-addr:%s)\n", $2));
+		if(!cfg_strlist_insert(&cfg_parser->cfg->forwards->src_addrs, $2))
+			yyerror("out of memory");
+	}
+	;
 auth_name: VAR_NAME STRING_ARG
 	{
 		OUTYY(("P(name:%s)\n", $2));

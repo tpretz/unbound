@@ -77,6 +77,8 @@ struct iter_forward_zone {
 	 * stub-zone with the same name exists, and should be used. 
 	 * This delegation point is malloced.
 	 */
+	struct outside_network* back;
+	/** link to outside network, if NULL use default */
 	struct delegpt* dp;
 	/** pointer to parent in tree (or NULL if none) */
 	struct iter_forward_zone* parent;

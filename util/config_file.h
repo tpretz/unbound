@@ -735,6 +735,8 @@ struct config_stub {
 	int ssl_upstream;
 	/*** no cache */
 	int no_cache;
+	/** list of source addresses, NULL equals defaults */
+	struct config_strlist* src_addrs;
 };
 
 /**
